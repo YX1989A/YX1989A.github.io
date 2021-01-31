@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>利用Hexo+Github搭建个人博客网站</title>
+    <url>/what/start/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​    很久以前就想搭建一个属于自己的个人博客网站，用来记录学习和工作过程中遇到的问题，相应的解决方法，和自己的生活想法，以及想让更多的人了解我（装逼）。虽说微博、QQ、CSDN这些平台都可以满足我的使用要求，<strong>但我想要的是一个高度自由没有框架束缚，完全由自己掌控的网站，还有就是兴趣使然，享受学习探索的过程。</strong><a id="more"></a></p>
+<p>​    主流的博客分为动态和静态两类：所谓动态，就是指有前端有后端，动态网页以数据库技术为基础，可以大大减少降低网站维护的工作量，可以登录到后台进行管理。静态博客是纯前端的展示，没有后端，静态网页的内容相对稳定，因此容易被搜索引擎检索。网上有很多搭建个人博客的详细教程，实现的方法也各有不同。根据网上的教程、开发文档以及结合我的搭建过程，总结出这篇文章。</p>
+<h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo"></a>什么是Hexo</h2><p><img src="https://gitee.com/viace/blogimg/raw/master/img/hexo.jpg">    <a href="https://hexo.io/zh-cn/">Hexo</a>是一款基于Node.js的静态博客框架，依赖少易于安装使用，Hexo 使用 Markdown（或其他渲染引擎）解析文章。Hexo可以理解为是基于node.js制作的一个博客工具。它是一个静态页面生成和上传的工具。可以方便的生成静态网页并托管在<a href="https://github.com/">GitHub</a>。</p>
+<h2 id="搭建流程："><a href="#搭建流程：" class="headerlink" title="搭建流程："></a>搭建流程：</h2><ul>
+<li>创建GitHub仓库</li>
+<li>安装Git</li>
+<li>安装Node.js</li>
+<li>安装Hexo</li>
+<li>推送网站</li>
+<li>绑定域名</li>
+<li>更换主题</li>
+<li>寻找图床</li>
+<li>发布文章</li>
+</ul>
+<h2 id="创建GitHub仓库"><a href="#创建GitHub仓库" class="headerlink" title="创建GitHub仓库"></a>创建GitHub仓库</h2><p>​    登录到GitHub，如果没有GitHub帐号，使用你的邮箱注册GitHub帐号<a href="https://github.com/join">注册GitHub</a> ，点击GitHub中的<strong>New repository</strong>创建新仓库，新建一个项目，如下所示：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/repository.png"></p>
+<p>​    仓库名应该为：<strong>用户名</strong>.github.io 这个<strong>用户名</strong>使用你的GitHub帐号名称代替，这是固定写法，比如我的仓库名为：<code>yx1989A.github.io</code>输入自己的项目名字，后面一定要加<code>.github.io</code>后缀，如下所示：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/create.png"></p>
+<p>​    点击创建仓库后，就会自动跳转到这个仓库的主页面。</p>
+<h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p>​    什么是Git ?简单来说Git是开源的分布式版本控制系统，用于敏捷高效地处理项目。我们网站在本地搭建好了，需要使用Git同步到GitHub上。从Git官网下载：<a href="https://git-scm.com/download/win">Git - Downloading Package</a> 选择64位的安装包下载后安装，在<strong>CMD命令行</strong>里输入git测试是否安装成功，若安装失败，参看其他详细的Git安装教程。安装成功后，将你的Git与GitHub帐号绑定，鼠标右击打开Git Bash</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/bash.png"></p>
+<p>​    或者在菜单里搜索Git Bash，设置user.name和user.email配置信息：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的GitHub用户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;你的GitHub注册邮箱&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>​    生成ssh密钥文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;你的GitHub注册邮箱&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>​    直接三个回车即可，默认不需要设置密码，然后找到生成的.ssh的文件夹中的id_rsa.pub密钥（文件搜索能快速找到）用记事本打开将内容全部复制</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/rsa.png"></p>
+<p>​    打开<a href="https://github.com/settings/keys">GitHub_Settings_keys</a> 页面，新建new SSH Key，Title为标题任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/ssh.png"></p>
+<p>​    在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#105;&#x74;&#x40;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;">&#103;&#105;&#x74;&#x40;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;</a> ：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/key.png"></p>
+<p>​    如上则说明成功。这里之所以设置GitHub密钥原因是，通过非对称加密的公钥与私钥来完成加密，公钥放置在GitHub上，私钥放置在自己的电脑里。GitHub要求每次推送代码都是合法用户，所以每次推送都需要输入账号密码验证推送用户是否是合法用户，</p>
+<p>​    为了省去每次输入密码的步骤，采用了ssh，当你推送的时候，git就会匹配你的私钥跟GitHub上面的公钥是否是配对的，若是匹配就认为你是合法用户，则允许推送。这样可以保证每次的推送都是正确合法的。</p>
+<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>​    Hexo基于Node.js，Node.js下载：<a href="https://nodejs.org/en/download/">Download | Node.js</a> 下载安装包，注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v 检测npm是否安装成功，在命令行中输入npm -v  </p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/-v.png"></p>
+<p>​    到这了，安装Hexo的环境已经全部搭建完成。</p>
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>​    Hexo就是我们的个人博客网站的框架， 这里需要自己在电脑常里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。比如我的博客文件都存放在<code>E:\Program Files (x86)\yxblog</code>目录下。创建好后进入文件夹中，在该目录下右键点击<code>Git Bash Here</code>，</p>
+<p>​    打开git的控制台窗口，定位到该目录下，输入<code>npm i hexo-cli -g</code>安装Hexo。会有几个报错，无视它就行。安装完后输入<code>hexo -v</code>验证是否安装成功。然后就要初始化我们的网站，输入<code>hexo init</code>初始化文件夹，接着输入<code>npm install</code>安装必备的组件。这样本地的网站配置也弄好啦，</p>
+<p>​    输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>打开本地服务器，然后浏览器打开<a href="https://localhost:4000/">http://localhost:4000/</a>，就可以看到我们的博客啦，效果如下：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/hw.png"></p>
+<p>​    按<code>ctrl+c</code>关闭本地服务器。</p>
+<h2 id="推送网站"><a href="#推送网站" class="headerlink" title="推送网站"></a>推送网站</h2><p>​    上面只是在本地预览，接下来要做的就是就是推送网站，也就是发布网站，让我们的网站可以被更多的人访问。在设置之前，需要解释一个概念，在blog根目录里的_config.yml文件称为<strong>站点</strong>配置文件，如下图</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/zconflg.png"></p>
+<p>​    进入根目录里的themes文件夹，里面也有个_config.yml文件，这个称为<strong>主题</strong>配置文件，如下图：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/nconfig.png"></p>
+<p>​    下一步将我们的Hexo与GitHub关联起来，打开站点的配置文件_config.yml，翻到最后修改为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repository: git@github.com:YX1989A/YX1989A.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>​    repository修改为你自己的github项目地址，保存站点配置文件。</p>
+<p>​    其实就是给hexo d 这个命令做相应的配置，让hexo知道你要把blog部署在哪个位置，很显然，我们部署在我们GitHub的仓库里。最后安装Git部署插件，在博客根目录下右键打开git bash，输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>​    这时，我们分别输入三条命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean </span><br><span class="line">hexo g </span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>​    其实第三条的 hexo d 就是部署网站命令，d是deploy的缩写。完成后打开浏览器，在地址栏输入你的放置个人网站的仓库路径，即 <a href="https://xxxx.github.io/">https://xxxx.github.io</a> 比如我的xxxx就是我的GitHub用户名：<a href="https://github.com/YX1989A/YX1989A.github.io">YX1989A.github.io</a></p>
+<p>​    你就会发现你的博客已经上线了，可以在网络上被访问了。</p>
+<h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><p>​    虽然在Internet上可以访问我们的网站，但是网址是GitHub提供的:<a href="https://xxxx.github.io/">https://xxxx.github.io</a>  而我们想使用我们自己的个性化域名，这就需要绑定我们自己的域名。<strong>注：国内的域名需要实名备案，国外的一些则不需要。</strong>首先你得购买一个域名，这里演示的是在namecheap的域名绑定，登录到namecheap进入管理控制台的域名列表，找到你的个性化域名添加三条解析记录：</p>
+<p>​    192.30.252.153是GitHub的地址，你也可以ping你的 <a href="https://xxxx.github.io/">http://xxxx.github.io</a> 的ip地址，填入进去。第三个记录类型是CNAME，CNAME的记录值是：你的用户名.<a href="https://github.io/">http://github.io</a> 这里千万别弄错了。</p>
+<p>​    然后登录GitHub，打开你的github博客项目，点击<code>settings</code>，拉到下面<code>Custom domain</code>处，填上你自己的域名，保存：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/yuming.png"></p>
+<p>​    进入本地博客文件夹 ，进入blog/source目录下，创建一个记事本文件，输入你的域名，对，只要写进你自己的域名即可。如果带有www，那么以后访问的时候必须带有www完整的域名才可以访问，但如果不带有www，以后访问的时候带不带www都可以访问。所以建议不要带有www。</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/txt.png"></p>
+<p>​    保存，命名为CNAME ，注意保存成<strong>所有文件</strong>而不是<strong>txt文件</strong>。</p>
+<p>​    完成这三步，进入blog目录中，按住shift键右击打开命令行，依次输入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>​    这时候打开浏览器在地址栏输入你的个性化域名将会直接进入你自己搭建的网站。</p>
+<h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>​    如果你不喜欢Hexo默认的主题，可以更换不同的主题，主题传送门：<a href="https://hexo.io/themes/">Themes</a> 我自己使用的是<a href="https://theme-next.js.org/docs/getting-started/">Next</a>主题，可以在blog目录中的themes文件夹中查看你自己主题是什么。现在把默认主题更改成Next主题，在blog目录中（就是命令行的位置处于blog目录）打开命令行输入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/next-theme/hexo-theme-next themes / next</span><br></pre></td></tr></table></figure>
+
+<p>​    这是将Next主题下载到blog目录的themes主题下的next文件夹中。打开<strong>站点</strong>的_config.yml配置文件，修改主题为next</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/next.png"></p>
+<p>​    打开<strong>主题</strong>的_config.yml配置文件，不是站点主题文件，找到Scheme</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/zt.png"></p>
+<p>​    next主题有四个样式，我用的是Muse，你们可以自己试试看，选择你自己喜欢的样式（只需要把行首的#去除，#是注释），选择好后，再次部署网站，hexo g、hexo d，查看效果。选择其他主题，按照上述过程即可实现。</p>
+<h2 id="寻找图床"><a href="#寻找图床" class="headerlink" title="寻找图床"></a>寻找图床</h2><p>​    图床，当博文中有图片时，若是少量图片，可以直接把图片存放在source文件夹中，但这显然不合理的，因为图片会占据大量的存储的空间，加载的时候相对缓慢 ，这时考虑把博文里的图片上传到某一网站，然后获得外部链接，使用Markdown语法，<strong>图片信息(外部链接)</strong> 完成图片的插入，这种网站就被成为图床。</p>
+<p>​    常见的简易的图床网站有：<strong>SM.MS    极简图床    聚合图床    七牛云</strong>。国内算比较好的图床我认为有两个：<a href="https://jiantuku.com/#/">极简图床</a> 和 <a href="https://link.zhihu.com/?target=https://www.qiniu.com/">七牛云</a> ，我自己是使用码云搭建的图床，可以参考：<a href="https://blog.csdn.net/qq_33289694/article/details/105979809">码云图床+PicGo+Typora</a>。图床最重要的就是稳定速度快，所以在挑选图床的时候一定要仔细，下图是博文插入图片，使用图床外链的示例：</p>
+<p><img src="https://gitee.com/viace/blogimg/raw/master/img/hh.png"></p>
+<h2 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h2><p>​    Markdown是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。Markdown语法简洁明了、容易掌握，而且功能比纯文本更强，因此写博客使用它，可以让用户更加专注的写文章，而不需要费尽心力的考虑样式，相对于html已经算是轻量级语言，</p>
+<p>​    像有道云笔记也支持Markdown写作。并且Markdown完全兼容html，也就是可以在文章里直接插入html代码。比如给博文添加音乐，就可以直接把音乐的外链html代码插入文章中。具体语法参看：<a href="https://link.zhihu.com/?target=http://www.appinn.com/markdown/">Markdown 语法说明(简体中文版)</a> 可以说十分钟就可以入门。当然工欲善其事必先利其器，选择一个好的Markdown编辑器也是非常重要的，这里推荐：<a href="https://www.typora.io/">Typora</a></p>
+<p>​    我们开始正式发布上线博客文章，在命令行中输入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo n <span class="string">&quot;text&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>​    我们会发现在blog根目录下的source文件夹中的_post文件夹中多了一个 <strong>test.md</strong> 文件，使用Markdown编辑器打开，就可以开始你的个人博客之旅了，Markdown常用的样式也就十来种，完全能够满足一般博文的样式要求，这是我的一篇博文内容示例：</p>
+<img src="https://gitee.com/viace/blogimg/raw/master/img/tt.png" style="zoom:80%;" />
+
+<p>​    通过带有预览样式的Markdown编辑器实时预览书写的博文样式，也可以通过命令 <code>hexo s --debug</code> 在本地浏览器的localhost:4000 预览博文效果。写好博文并且样式无误后，通过<code>hexo g、hexo d</code> 生成部署网页。随后可以在浏览器中输入域名浏览。</p>
+<p>​    这篇教程大部分参考了这篇文章<a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a>，结合了自己的一点经验，很荣幸写成本博客的第一篇文章，之后会继续更新本文章的内容以及另开一篇关于Hexo博客和next主题的优化设置。</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>橘子蛋糕</title>
+    <url>/what/test/</url>
+    <content><![CDATA[<p>我认识一个人，他酷爱橘子蛋糕。累了，就去买一小块橘子蛋糕，咬下去时他的表情是放松的。他很忙，忙于工作，忙于讨好上司，忙于养房子，忙于车贷。唯一开心的事就是回到家，躺在沙发上，吃一口橘子蛋糕。<a id="more"></a></p>
+<p>他的父母反对他吃橘子蛋糕，”因为橘子蛋糕有糖分，会导致蛀牙！”他的父母说。每当他吃橘子蛋糕时，他的父母都会闲上一嘴：”多大的人了，还吃橘子蛋糕？小孩子才爱吃甜的东西！”这话是谁都不爱听的，我爱吃什么你们为什么要管呢？</p>
+<p>他的父母还是反对，反对他吃橘子蛋糕。从一开始的小声嘀咕，到后面的大吵大闹，再到掀桌子，把橘子蛋糕丢出窗外。他看在眼里，却又不知道怎么反抗。因为只有小孩子才会反抗——而他已经是踏入社会的社会人了。</p>
+<p>今天也是一样，忙碌了一天，被上司臭骂，又被炒鱿鱼。他拖着自己的躯壳回到家打开冰箱，原本放在那里的橘子蛋糕不翼而飞——而关上冰箱后站在身边的父亲和他说:”你的蛋糕我已经扔了，成熟点，谁没点压力呢？别这么脆弱。”</p>
+<p>父亲的话，轻轻描出他的委屈他的压力，又将它们重重地拍在地上，语重心长地说，”别这么脆弱。”</p>
+<p>他的脑海里像放映室一样放着电影——那些本该忍住的委屈，那些本该由”成熟的人””理应”去承受的压力。</p>
+<p>从片头，到片尾，漫长，痛苦。</p>
+<p>而回过神，他早已在楼与楼之前，高速坠落。</p>
+<p>“都怪橘子蛋糕！把我孩子害成这样！没有橘子蛋糕我家孩子什么事都没有！！我这么辛苦养他！他怎么就是不理解我呢！！”</p>
+<p>他的父亲在记者的摄像机前以泪洗面。</p>
+<p>​                                                                        作者：橘砸今天吃肉了吗</p>
+]]></content>
+      <tags>
+        <tag>心态</tag>
+      </tags>
+  </entry>
+</search>
